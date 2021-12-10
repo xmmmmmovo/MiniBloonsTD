@@ -10,11 +10,14 @@ from constants import cell_number, cell_size, fruit_color
 
 class Fruit:
     def __init__(self) -> None:
-        self.x = randint(0, cell_number - 1)
-        self.y = randint(0, cell_number - 1)
-        self.pos = Vector2(self.x, self.y)
+        self.randomize()
 
     def draw_fruit(self, screen):
         fruit_rect = pygame.Rect(
             self.x * cell_size, self.y * cell_size, cell_size, cell_size)
         rect(screen, fruit_color, fruit_rect)
+
+    def randomize(self):
+        self.x = randint(0, cell_number - 1)
+        self.y = randint(0, cell_number - 1)
+        self.pos = Vector2(self.x, self.y)

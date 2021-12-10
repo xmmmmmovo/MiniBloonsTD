@@ -1,7 +1,8 @@
 from pygame.math import Vector2
 from pygame.image import load
 from pygame.mixer import Sound
-from pygame import Rect, Surface
+from pygame import Rect
+from pygame.surface import Surface
 
 from constants import cell_size
 
@@ -22,9 +23,10 @@ class Snake():
         self.tail_right = load("images/tail_right.png").convert_alpha()
         self.tail_left = load("images/tail_left.png").convert_alpha()
 
-        self.body_vertical = load("images/body_vertical.png").convert_alpha()
         self.body_vertical = load(
             'images/body_vertical.png').convert_alpha()
+        self.body_horizontal = load(
+            "images/body_horizontal.png").convert_alpha()
 
         self.body_tr = load('images/body_tr.png').convert_alpha()
         self.body_tl = load('images/body_tl.png').convert_alpha()
@@ -46,7 +48,21 @@ class Snake():
             elif idx == len(self.body) - 1:
                 screen.blit(self.tail, block_rect)
             else:
-                pass
+                previous_block = self.body[idx + 1] - block
+                next_block = self.body[idx - 1] - block
+                if previous_block.x == next_block.x:
+                    screen.blit(self.body_vertical, block_rect)
+                elif previous_block.y == next_block.y:
+                    screen.blit(self.body_horizontal, block_rect)
+                else:
+                    if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
+                        screen.blit(self.body_tl, block_rect)
+                    elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
+                        screen.blit(self.body_bl, block_rect)
+                    elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
+                        screen.blit(self.body_tr, block_rect)
+                    elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
+                        screen.blit(self.body_br, block_rect)
 
     def update_head_graphics(self):
         head_relation = self.body[1] - self.body[0]
